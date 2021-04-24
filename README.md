@@ -1,5 +1,5 @@
 # Access
-#### A generic programming for accessing class members, ignoring their access specifiers.  
+#### A generic library for accessing class members, ignoring their access specifiers.  
 
 * No need to modify the target class
 * No need to overwrite access specifiers with macros
