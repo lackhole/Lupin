@@ -11,9 +11,13 @@
 
 namespace access {
 
+/** call non-static member function */
+
 template<typename Tag, typename Target, typename ...Args>
-inline constexpr decltype(auto)
-call(Target&& target, Args&&... args) {
+inline constexpr auto
+call(Target&& target, Args&&... args)
+  -> decltype((std::forward<Target>(target).*TagTraits<Tag>::accessor_type::ptr)(std::forward<Args>(args)...))
+{
   using tag_traits = TagTraits<Tag>;
   using access_type = typename tag_traits::access_type;
   using accessor_type = typename tag_traits::accessor_type;
@@ -23,7 +27,7 @@ call(Target&& target, Args&&... args) {
   return (std::forward<Target>(target).*accessor_type::ptr)(std::forward<Args>(args)...);
 }
 
-// gcc < 10 cannot compile below overloads
+/** gcc < 10 cannot compile the below overloads */
 
 //template<typename Tag, typename Target, typename ...Args>
 //inline constexpr decltype(auto)
@@ -61,9 +65,13 @@ call(Target&& target, Args&&... args) {
 //  return (std::forward<Target>(target).*accessor_type::ptr)(std::forward<Args>(args)...);
 //}
 
+/** call static member function */
+
 template<typename Tag, typename ...Args>
-inline constexpr decltype(auto)
-call(Args&&... args) {
+inline constexpr auto
+call(Args&&... args)
+  -> decltype((TagTraits<Tag>::accessor_type::ptr)(std::forward<Args>(args)...))
+{
   using tag_traits = TagTraits<Tag>;
   using access_type = typename tag_traits::access_type;
   using accessor_type = typename tag_traits::accessor_type;

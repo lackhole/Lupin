@@ -11,41 +11,81 @@
 
 namespace access {
 
+/** get non-static member variable */
+
 template<typename Tag, typename Target>
 inline constexpr
-std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value,
-    get_pointing_type_t < typename TagTraits<Tag>::access_type> &>
+typename std::enable_if<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t<typename TagTraits<Tag>::access_type> &>::type
 get(Target& target) {
   return target.*TagTraits<Tag>::accessor_type::ptr;
 }
 
 template<typename Tag, typename Target>
 inline constexpr
-std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value,
-    get_pointing_type_t < typename TagTraits<Tag>::access_type> const &>
+typename std::enable_if<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t<typename TagTraits<Tag>::access_type> const &>::type
 get(const Target& target) {
   return target.*TagTraits<Tag>::accessor_type::ptr;
 }
 
+template<typename Tag, typename Target>
+inline constexpr
+typename std::enable_if<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t<typename TagTraits<Tag>::access_type>>::type
+get(Target&& target) {
+  return std::forward<Target>(target).*TagTraits<Tag>::accessor_type::ptr;
+}
 
 template<typename Tag, typename Target>
 inline constexpr
-std::enable_if_t<is_function<typename TagTraits<Tag>::access_type>::value, typename TagTraits<Tag>::access_type>
+typename std::enable_if<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t<typename TagTraits<Tag>::access_type>>::type
+get(const Target&& target) {
+  return std::forward<Target>(target).*TagTraits<Tag>::accessor_type::ptr;
+}
+
+/** get non-static member function pointer */
+
+template<typename Tag, typename Target>
+inline constexpr
+typename std::enable_if<is_function<typename TagTraits<Tag>::access_type>::value,
+    typename TagTraits<Tag>::access_type>::type
 get(Target& target) {
   return TagTraits<Tag>::accessor_type::ptr;
 }
 
 template<typename Tag, typename Target>
 inline constexpr
-std::enable_if_t<is_function<typename TagTraits<Tag>::access_type>::value, typename TagTraits<Tag>::access_type const>
+typename std::enable_if<is_function<typename TagTraits<Tag>::access_type>::value,
+    typename TagTraits<Tag>::access_type const>::type
 get(const Target& target) {
   return TagTraits<Tag>::accessor_type::ptr;
 }
+
+template<typename Tag, typename Target>
+inline constexpr
+typename std::enable_if<is_function<typename TagTraits<Tag>::access_type>::value,
+    typename TagTraits<Tag>::access_type>::type
+get(Target&& target) {
+  return TagTraits<Tag>::accessor_type::ptr;
+}
+
+template<typename Tag, typename Target>
+inline constexpr
+typename std::enable_if<is_function<typename TagTraits<Tag>::access_type>::value,
+    typename TagTraits<Tag>::access_type const>::type
+get(const Target&& target) {
+  return TagTraits<Tag>::accessor_type::ptr;
+}
+
+/** get static member (both variable and function) */
 
 template<typename Tag>
-inline constexpr
-decltype(auto)
-get() {
+inline constexpr auto
+get()
+  -> decltype(*TagTraits<Tag>::accessor_type::ptr)
+{
   return *TagTraits<Tag>::accessor_type::ptr;
 }
 
