@@ -13,14 +13,16 @@ namespace access {
 
 template<typename Tag, typename Target>
 inline constexpr
-std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value, typename TagTraits<Tag>::access_type &>
+std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t < typename TagTraits<Tag>::access_type> &>
 get(Target& target) {
   return target.*TagTraits<Tag>::accessor_type::ptr;
 }
 
 template<typename Tag, typename Target>
 inline constexpr
-std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value, typename TagTraits<Tag>::access_type const&>
+std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t < typename TagTraits<Tag>::access_type> const &>
 get(const Target& target) {
   return target.*TagTraits<Tag>::accessor_type::ptr;
 }
@@ -38,6 +40,13 @@ inline constexpr
 std::enable_if_t<is_function<typename TagTraits<Tag>::access_type>::value, typename TagTraits<Tag>::access_type const>
 get(const Target& target) {
   return TagTraits<Tag>::accessor_type::ptr;
+}
+
+template<typename Tag>
+inline constexpr
+decltype(auto)
+get() {
+  return *TagTraits<Tag>::accessor_type::ptr;
 }
 
 

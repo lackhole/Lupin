@@ -6,14 +6,13 @@
 #define ACCESS_ACCESSOR_H_
 
 #include "access/tag.h"
-#include "access/is_function.h"
+#include "access/type_traits.h"
 
 #include <type_traits>
 
 namespace access {
 
-template<typename Tag, typename Class, typename Type,
-    std::conditional_t<is_function<Type>::value, Type, Type Class::*> ptr_>
+template<typename Tag, typename Class, typename Type, Type ptr_>
 struct Accessor {
   using class_type                  = Class;
   using access_type                 = Type;

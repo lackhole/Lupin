@@ -6,12 +6,13 @@
 #define ACCESS_TYPE_H
 
 #include "access/tag.h"
+#include "access/type_traits.h"
 
 namespace access {
 
 template<typename Tag>
 struct Type {
-  using type = typename TagTraits<Tag>::access_type;
+  using type = get_pointing_type_t<typename TagTraits<Tag>::access_type>;
 };
 
 template<typename Tag>
