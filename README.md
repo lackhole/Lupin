@@ -13,7 +13,7 @@
 
 ## Requirements
 ### C++ Version
-* C++11 or higher
+* C++14 or higher
 ### Compiler Support
 
 | Compiler | Minimum version |

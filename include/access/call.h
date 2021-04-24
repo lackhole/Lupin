@@ -8,16 +8,15 @@
 #include "access/tag.h"
 
 #include <type_traits>
+#include <utility>
 
 namespace access {
 
 /** call non-static member function */
 
 template<typename Tag, typename Target, typename ...Args>
-inline constexpr auto
-call(Target&& target, Args&&... args)
-  -> decltype((std::forward<Target>(target).*TagTraits<Tag>::accessor_type::ptr)(std::forward<Args>(args)...))
-{
+inline constexpr decltype(auto)
+call(Target&& target, Args&&... args) {
   using tag_traits = TagTraits<Tag>;
   using access_type = typename tag_traits::access_type;
   using accessor_type = typename tag_traits::accessor_type;
@@ -68,15 +67,14 @@ call(Target&& target, Args&&... args)
 /** call static member function */
 
 template<typename Tag, typename ...Args>
-inline constexpr auto
-call(Args&&... args)
-  -> decltype((TagTraits<Tag>::accessor_type::ptr)(std::forward<Args>(args)...))
-{
+inline constexpr decltype(auto)
+call(Args&&... args) {
   using tag_traits = TagTraits<Tag>;
   using access_type = typename tag_traits::access_type;
   using accessor_type = typename tag_traits::accessor_type;
 
-  static_assert(!std::is_member_function_pointer<access_type>::value && std::is_function<std::remove_pointer_t<access_type>>::value,
+  static_assert(!std::is_member_function_pointer<access_type>::value &&
+                std::is_function<std::remove_pointer_t<access_type>>::value,
                 "Tag must represent static member function");
   return (accessor_type::ptr)(std::forward<Args>(args)...);
 }

@@ -8,6 +8,7 @@
 #include "access/tag.h"
 
 #include <type_traits>
+#include <utility>
 
 namespace access {
 
@@ -15,32 +16,32 @@ namespace access {
 
 template<typename Tag, typename Target>
 inline constexpr
-typename std::enable_if<!is_function<typename TagTraits<Tag>::access_type>::value,
-    get_pointing_type_t<typename TagTraits<Tag>::access_type> &>::type
+std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t<typename TagTraits<Tag>::access_type> &>
 get(Target& target) {
   return target.*TagTraits<Tag>::accessor_type::ptr;
 }
 
 template<typename Tag, typename Target>
 inline constexpr
-typename std::enable_if<!is_function<typename TagTraits<Tag>::access_type>::value,
-    get_pointing_type_t<typename TagTraits<Tag>::access_type> const &>::type
+std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t<typename TagTraits<Tag>::access_type> const &>
 get(const Target& target) {
   return target.*TagTraits<Tag>::accessor_type::ptr;
 }
 
 template<typename Tag, typename Target>
 inline constexpr
-typename std::enable_if<!is_function<typename TagTraits<Tag>::access_type>::value,
-    get_pointing_type_t<typename TagTraits<Tag>::access_type>>::type
+std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t<typename TagTraits<Tag>::access_type>>
 get(Target&& target) {
   return std::forward<Target>(target).*TagTraits<Tag>::accessor_type::ptr;
 }
 
 template<typename Tag, typename Target>
 inline constexpr
-typename std::enable_if<!is_function<typename TagTraits<Tag>::access_type>::value,
-    get_pointing_type_t<typename TagTraits<Tag>::access_type>>::type
+std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t<typename TagTraits<Tag>::access_type>>
 get(const Target&& target) {
   return std::forward<Target>(target).*TagTraits<Tag>::accessor_type::ptr;
 }
@@ -49,32 +50,32 @@ get(const Target&& target) {
 
 template<typename Tag, typename Target>
 inline constexpr
-typename std::enable_if<is_function<typename TagTraits<Tag>::access_type>::value,
-    typename TagTraits<Tag>::access_type>::type
+std::enable_if_t<is_function<typename TagTraits<Tag>::access_type>::value,
+    typename TagTraits<Tag>::access_type>
 get(Target& target) {
   return TagTraits<Tag>::accessor_type::ptr;
 }
 
 template<typename Tag, typename Target>
 inline constexpr
-typename std::enable_if<is_function<typename TagTraits<Tag>::access_type>::value,
-    typename TagTraits<Tag>::access_type const>::type
+std::enable_if_t<is_function<typename TagTraits<Tag>::access_type>::value,
+    typename TagTraits<Tag>::access_type const>
 get(const Target& target) {
   return TagTraits<Tag>::accessor_type::ptr;
 }
 
 template<typename Tag, typename Target>
 inline constexpr
-typename std::enable_if<is_function<typename TagTraits<Tag>::access_type>::value,
-    typename TagTraits<Tag>::access_type>::type
+std::enable_if_t<is_function<typename TagTraits<Tag>::access_type>::value,
+    typename TagTraits<Tag>::access_type>
 get(Target&& target) {
   return TagTraits<Tag>::accessor_type::ptr;
 }
 
 template<typename Tag, typename Target>
 inline constexpr
-typename std::enable_if<is_function<typename TagTraits<Tag>::access_type>::value,
-    typename TagTraits<Tag>::access_type const>::type
+std::enable_if_t<is_function<typename TagTraits<Tag>::access_type>::value,
+    typename TagTraits<Tag>::access_type const>
 get(const Target&& target) {
   return TagTraits<Tag>::accessor_type::ptr;
 }
@@ -82,10 +83,8 @@ get(const Target&& target) {
 /** get static member (both variable and function) */
 
 template<typename Tag>
-inline constexpr auto
-get()
-  -> decltype(*TagTraits<Tag>::accessor_type::ptr)
-{
+inline constexpr decltype(auto)
+get() {
   return *TagTraits<Tag>::accessor_type::ptr;
 }
 

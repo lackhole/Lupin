@@ -73,7 +73,7 @@ int main() {
   // Note that these three are different too
   static_assert(std::is_same<access::Type_t<tag_hidden_sta>, int()>::value, "");
   static_assert(std::is_same<decltype(access::get<tag_hidden_sta>()), int(&)()>::value, "");
-  static_assert(std::is_same<std::decay<decltype(access::get<tag_hidden_sta>())>::type, int(*)()>::value, "");
+  static_assert(std::is_same<std::decay_t<decltype(access::get<tag_hidden_sta>())>, int(*)()>::value, "");
 
   return 0;
 }
