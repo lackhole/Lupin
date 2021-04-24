@@ -6,6 +6,7 @@
 * Not using dirty pointer-offset, making it more flexible on class change.
 * Header-only
 * Only requires the name of the class and member
+* Can be useful when testing private/protected members or functions.
 
 ## Requirements
 ### C++ Version
