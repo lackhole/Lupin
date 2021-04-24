@@ -6,9 +6,10 @@
 * C++11 or higher
 ### Compiler Support
 
-\ Compiler \ Minimum version \
-\----------\--------------\
-\gcc       \ 6.0 or higher\
-\clang     \ 8.0 or higher\
+| Compiler | Minimum version |
+|----------|-----------------|
+| gcc      |       6.0       |
+| clang    |       8.0       |
+| MSVC     |19.14(below not tested)|
 
 
