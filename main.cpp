@@ -50,6 +50,8 @@ int main() {
   access::get<tag_hidden_sta>(h)();
   access::call<tag_hidden_sta>();
 
+  static_assert(std::is_same<access::Type_t<tag_hidden_x>, int>::value, "");
+
 
 
   return 0;
