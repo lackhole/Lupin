@@ -17,7 +17,7 @@
 
 // tag_name, class_name, member_name
 #define ACCESS_CREATE_TAG(tag, clazz, member)                               \
-  using tag = ::access::Tag<class ACCESS_CONCAT(ACCESS_CONCAT(clazz, member), __LINE__)>;  \
+  using tag = ::access::Tag<class ACCESS_CONCAT(ACCESS_CONCAT(ACCESS_CONCAT(access_dummy$1znq_baf,clazz), member), __LINE__)>;  \
   ACCESS_ENABLE_TAG(tag, clazz, member)
 
 // class_name, member_name, template_parameters...(if necessary)
