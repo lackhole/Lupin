@@ -83,7 +83,15 @@ get(const Target&& target) {
 /** get static member (both variable and function) */
 
 template<typename Tag>
-inline constexpr decltype(auto)
+std::enable_if_t<!is_function<typename TagTraits<Tag>::access_type>::value,
+    get_pointing_type_t<typename TagTraits<Tag>::access_type> &>
+get() {
+  return *TagTraits<Tag>::accessor_type::ptr;
+}
+
+template<typename Tag>
+std::enable_if_t<is_function<typename TagTraits<Tag>::access_type>::value,
+    typename TagTraits<Tag>::access_type>
 get() {
   return *TagTraits<Tag>::accessor_type::ptr;
 }
