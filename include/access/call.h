@@ -17,52 +17,15 @@ namespace access {
 template<typename Tag, typename Target, typename ...Args>
 inline constexpr decltype(auto)
 call(Target&& target, Args&&... args) {
-  using tag_traits = TagTraits<Tag>;
-  using access_type = typename tag_traits::access_type;
+  using tag_traits    = TagTraits<Tag>;
+  using access_type   = typename tag_traits::access_type;
   using accessor_type = typename tag_traits::accessor_type;
+  using pointer_type  = typename tag_traits::pointer_type;
 
-  static_assert(std::is_member_function_pointer<access_type>::value,
-                "Tag must represent member function, or perhaps the tag represents static member function");
+  static_assert(!std::is_function<std::remove_pointer_t<pointer_type>>::value, "Static function doest not require a instance");
+  static_assert(std::is_member_function_pointer<access_type>::value, "Tag must represent non-static member function");
   return (std::forward<Target>(target).*accessor_type::ptr)(std::forward<Args>(args)...);
 }
-
-/** gcc < 10 cannot compile the below overloads */
-
-//template<typename Tag, typename Target, typename ...Args>
-//inline constexpr decltype(auto)
-//call(Target& target, Args&&... args) {
-//  using tag_traits = TagTraits<Tag>;
-//  using access_type = typename tag_traits::access_type;
-//  using accessor_type = typename tag_traits::accessor_type;
-//
-//  static_assert(std::is_member_function_pointer<access_type>::value,
-//                "Tag must represent member function, or perhaps the tag represents static member function");
-//  return (target.*accessor_type::ptr)(std::forward<Args>(args)...);
-//}
-//
-//template<typename Tag, typename Target, typename ...Args>
-//inline constexpr decltype(auto)
-//call(const Target& target, Args&&... args) {
-//  using tag_traits = TagTraits<Tag>;
-//  using access_type = typename tag_traits::access_type;
-//  using accessor_type = typename tag_traits::accessor_type;
-//
-//  static_assert(std::is_member_function_pointer<access_type>::value,
-//                "Tag must represent member function, or perhaps the tag represents static member function");
-//  return (target.*accessor_type::ptr)(std::forward<Args>(args)...);
-//}
-//
-//template<typename Tag, typename Target, typename ...Args>
-//inline constexpr decltype(auto)
-//call(const Target&& target, Args&&... args) {
-//  using tag_traits = TagTraits<Tag>;
-//  using access_type = typename tag_traits::access_type;
-//  using accessor_type = typename tag_traits::accessor_type;
-//
-//  static_assert(std::is_member_function_pointer<access_type>::value,
-//                "Tag must represent member function, or perhaps the tag represents static member function");
-//  return (std::forward<Target>(target).*accessor_type::ptr)(std::forward<Args>(args)...);
-//}
 
 /** call static member function */
 
@@ -75,7 +38,7 @@ call(Args&&... args) {
 
   static_assert(!std::is_member_function_pointer<access_type>::value &&
                 std::is_function<std::remove_pointer_t<access_type>>::value,
-                "Tag must represent static member function");
+                "Tag must represent a static member function");
   return (accessor_type::ptr)(std::forward<Args>(args)...);
 }
 
