@@ -6,9 +6,10 @@
 * Not using dirty pointer-offset, making it more flexible on changes.
 
 
+
 * Header-only
 * Compile-time traits, zero runtime overhead.
-* Only requires the name of the class and member
+* Only requires the name of the class and member(type **not** required)
 * Can be useful when testing private/protected members or functions.
 
 ## Requirements
