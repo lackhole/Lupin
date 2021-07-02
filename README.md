@@ -5,11 +5,11 @@
 * No need to overwrite access specifiers with macros
 * Not using dirty pointer-offset, making it more flexible on changes.
 
-
+<br/>
 
 * Header-only
 * Compile-time traits, zero runtime overhead.
-* Only requires the name of the class and member(type **not** required)
+* Only requires the name of the class and member(member type **NOT** required!)
 * Can be useful when testing private/protected members or functions.
 
 ## Requirements
@@ -31,7 +31,7 @@
 Whole example can be found [here](main.cpp)
 
 ### Motivating Example 1
-```
+```c++
 #include <iostream>
 
 #include "access/access.hpp"
@@ -63,7 +63,7 @@ int main() {
 ```
 
 ### Motivating Example 2
-```
+```c++
 #include <iostream>
 
 #include "access/access.hpp"
@@ -88,7 +88,7 @@ int main() {
 ```
 
 ### Motivating Example 3
-```
+```c++
 #include "access/access.hpp"
 
 struct foo {
@@ -110,7 +110,7 @@ int main() {
 ```
 
 ### Motivating Example 4
-```
+```c++
 #include "access/access.hpp"
 
 struct foo {
