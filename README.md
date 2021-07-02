@@ -76,14 +76,14 @@ struct foo {
 };
 
 // simplified using macro
-ACCESS_CREATE_TAG(my_tag_123, hidden, x);
-ACCESS_CREATE_UNIQUE_TAG(hidden, x);
+ACCESS_CREATE_TAG(my_tag_123, foo, age);
+ACCESS_CREATE_UNIQUE_TAG(foo, age);
 
 int main() {
   foo f;
   
-  auto a = access::get<my_tag_123>(h);                        // named tag access
-  auto b = access::get<ACCESS_GET_UNIQUE_TAG(hidden, x)>(h);  // unnamed tag(unique) access
+  auto a = access::get<my_tag_123>(f);                      // named tag access
+  auto b = access::get<ACCESS_GET_UNIQUE_TAG(foo, age)>(h); // unnamed tag(unique) access
 }
 ```
 
